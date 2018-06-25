@@ -1,0 +1,212 @@
+-- phpMyAdmin SQL Dump
+-- version 4.7.0
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 30-05-2018 a las 19:54:14
+-- Versión del servidor: 10.1.25-MariaDB
+-- Versión de PHP: 7.1.7
+
+/* SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO"; */
+AUTOCOMMIT := 0;
+START TRANSACTION;
+time_zone := "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `proyectoa`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cliente`
+--
+
+CREATE TABLE cliente (
+  id int NOT NULL,
+  rfc varchar(13) NOT NULL,
+  razonsocial varchar(255) DEFAULT NULL
+) ;
+
+--
+-- Volcado de datos para la tabla `cliente`
+--
+
+INSERT INTO cliente (id, rfc, razonsocial) VALUES
+(1, '134sadasdas', 'Unesco');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detallepedido`
+--
+
+CREATE TABLE detallepedido (
+  id int NOT NULL,
+  cantidad int NOT NULL,
+  precio decimal(15,2) NOT NULL,
+  idpedido int NOT NULL,
+  idproducto int NOT NULL
+) ;
+
+--
+-- Volcado de datos para la tabla `detallepedido`
+--
+
+INSERT INTO detallepedido (id, cantidad, precio, idpedido, idproducto) VALUES
+(1, 18, '25.00', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedido`
+--
+
+CREATE TABLE pedido (
+  id int NOT NULL,
+  fecha date DEFAULT NULL,
+  idcliente int NOT NULL
+) ;
+
+--
+-- Volcado de datos para la tabla `pedido`
+--
+
+INSERT INTO pedido (id, fecha, idcliente) VALUES
+(1, '0000-00-00', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `producto`
+--
+
+CREATE TABLE producto (
+  id int NOT NULL,
+  nombrep varchar(13) NOT NULL,
+  preciosugerido decimal(15,2) NOT NULL
+) ;
+
+--
+-- Volcado de datos para la tabla `producto`
+--
+
+INSERT INTO producto (id, nombrep, preciosugerido) VALUES
+(1, 'aguaCiel', '18.50');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `user`
+--
+
+CREATE TABLE user (
+  id int NOT NULL,
+  username varchar(50) NOT NULL,
+  password varchar(250) NOT NULL,
+  authKey varchar(250) NOT NULL,
+  accessToken varchar(250) NOT NULL,
+  role int NOT NULL
+) ;
+
+--
+-- Volcado de datos para la tabla `user`
+--
+
+INSERT INTO user (id, username, password, authKey, accessToken, role) VALUES
+(1, 'adam', 'nemesis', 'nemesis', 'lol', 1),
+(2, 'helena', 'nemesis', 'nemesis', 'lol', 2);
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `cliente`
+--
+ALTER TABLE cliente
+  ADD PRIMARY KEY (id);
+
+--
+-- Indices de la tabla `detallepedido`
+--
+ALTER TABLE detallepedido
+  ADD PRIMARY KEY (id,idpedido,idproducto),
+  ADD KEY `idpedido` (idpedido),
+  ADD KEY `idproducto` (idproducto);
+
+--
+-- Indices de la tabla `pedido`
+--
+ALTER TABLE pedido
+  ADD PRIMARY KEY (id),
+  ADD KEY `idcliente` (idcliente);
+
+--
+-- Indices de la tabla `producto`
+--
+ALTER TABLE producto
+  ADD PRIMARY KEY (id);
+
+--
+-- Indices de la tabla `user`
+--
+ALTER TABLE user
+  ADD PRIMARY KEY (id);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `cliente`
+--
+ALTER TABLE cliente
+  MODIFY id cast(11 as int) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT de la tabla `detallepedido`
+--
+ALTER TABLE detallepedido
+  MODIFY id cast(11 as int) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT de la tabla `pedido`
+--
+ALTER TABLE pedido
+  MODIFY id cast(11 as int) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT de la tabla `producto`
+--
+ALTER TABLE producto
+  MODIFY id cast(11 as int) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT de la tabla `user`
+--
+ALTER TABLE user
+  MODIFY id cast(11 as int) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `detallepedido`
+--
+ALTER TABLE detallepedido
+  ADD CONSTRAINT detallepedido_ibfk_1 FOREIGN KEY (idpedido) REFERENCES pedido (id),
+  ADD CONSTRAINT detallepedido_ibfk_2 FOREIGN KEY (idproducto) REFERENCES `producto` (id);
+
+--
+-- Filtros para la tabla `pedido`
+--
+ALTER TABLE pedido
+  ADD CONSTRAINT pedido_ibfk_1 FOREIGN KEY (idcliente) REFERENCES cliente (id);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
